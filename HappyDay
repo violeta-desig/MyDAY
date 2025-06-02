@@ -1,399 +1,532 @@
-<!doctype html>
-<html>
+import React, { useState, useEffect } from 'react';
+import { Heart, MessageCircle, Music, Camera, Gift, Home, Calendar } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-<head>
-    <meta charset="utf-8" />
+// Datos de canciones
+const playlistSongs = [
+  {
+    id: "3QaPy1KgI7nu9FJEQUgn6h",
+    title: "birds of a feather",
+    artist: "Billie Eilish",
+    spotifyUrl: "https://open.spotify.com/track/3QaPy1KgI7nu9FJEQUgn6h",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "0C21qHj3ebbxrRLqbjWnOT",
+    title: "Incondicional",
+    artist: "Babi",
+    spotifyUrl: "https://open.spotify.com/track/0C21qHj3ebbxrRLqbjWnOT",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "3NUoEQ2W7pjFSOy08nXQed",
+    title: "Colegas",
+    artist: "Babi",
+    spotifyUrl: "https://open.spotify.com/track/3NUoEQ2W7pjFSOy08nXQed",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "2ItAnWcjHz4lw8nIk6bkrC",
+    title: "Heart Rate",
+    artist: "Babi ft. Joanna Torres",
+    spotifyUrl: "https://open.spotify.com/track/2ItAnWcjHz4lw8nIk6bkrC",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "3GSMdtJphymHEsR8K9jT5Q",
+    title: "Locos",
+    artist: "León Larregui",
+    spotifyUrl: "https://open.spotify.com/track/3GSMdtJphymHEsR8K9jT5Q",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "4hZruFvYKD0q57UJKs3XrQ",
+    title: "Cómo Tú",
+    artist: "León Larregui",
+    spotifyUrl: "https://open.spotify.com/track/4hZruFvYKD0q57UJKs3XrQ",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "2QjOHCTQ1Jl3zawyYOpxh6",
+    title: "Sweater Weather",
+    artist: "The Neighbourhood",
+    spotifyUrl: "https://open.spotify.com/track/2QjOHCTQ1Jl3zawyYOpxh6",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "3MqNcX1bfvExPBUCRuPc1Z",
+    title: "Luna",
+    artist: "Zoé",
+    spotifyUrl: "https://open.spotify.com/track/3MqNcX1bfvExPBUCRuPc1Z",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "50x1Ic8CaXkYNvjmxe3WXy",
+    title: "Those Eyes",
+    artist: "New West",
+    spotifyUrl: "https://open.spotify.com/track/50x1Ic8CaXkYNvjmxe3WXy",
+    cover: "/api/placeholder/300/300"
+  },
+  // Canciones adicionales
+  {
+    id: "7nYvUtkQMx1v80S2FkriAn",
+    title: "Amor Completo",
+    artist: "Mon Laferte",
+    spotifyUrl: "https://open.spotify.com/track/7nYvUtkQMx1v80S2FkriAn",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "1TD9l7SfYWYC9bLLXXBXEb",
+    title: "Die With A Smile",
+    artist: "Bruno Mars, Lady Gaga",
+    spotifyUrl: "https://open.spotify.com/track/1TD9l7SfYWYC9bLLXXBXEb",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "1I3abJEk4g50sCQiDy84Kc",
+    title: "Por Eso Te Amo",
+    artist: "Río Roma",
+    spotifyUrl: "https://open.spotify.com/track/1I3abJEk4g50sCQiDy84Kc",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "3uhkybRBYHGRPZQQgHm9f2",
+    title: "Mariposas",
+    artist: "Enanitos Verdes",
+    spotifyUrl: "https://open.spotify.com/track/3uhkybRBYHGRPZQQgHm9f2",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "2pDMirO64BjFxLumOtf0IG",
+    title: "Heartbeat",
+    artist: "BTS",
+    spotifyUrl: "https://open.spotify.com/track/2pDMirO64BjFxLumOtf0IG",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "4VXIryQMWpIdGgYR4TrjT1",
+    title: "hostage",
+    artist: "Billie Eilish",
+    spotifyUrl: "https://open.spotify.com/track/4VXIryQMWpIdGgYR4TrjT1",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "5x48z5fxtm63mGbmKIGVZS",
+    title: "Halley's Comet",
+    artist: "Billie Eilish",
+    spotifyUrl: "https://open.spotify.com/track/5x48z5fxtm63mGbmKIGVZS",
+    cover: "/api/placeholder/300/300"
+  },
+  {
+    id: "5KzPglDQJ4gIkFUl79eL2t",
+    title: "Te Quiero Mucho",
+    artist: "Río Roma",
+    spotifyUrl: "https://open.spotify.com/track/5KzPglDQJ4gIkFUl79eL2t",
+    cover: "/api/placeholder/300/300"
+  }
+];
 
-    <title>Un ramo para ti</title>
-    <style>
-        body {
-            height: 100%;
-            width: 100%;
-            background: #080f1a;
-            overflow: hidden;
-        }
+const AnniversaryPage = () => {
+  const [currentView, setCurrentView] = useState('login');
+  const [date, setDate] = useState('');
+  const [error, setError] = useState('');
+  const [currentMessage, setCurrentMessage] = useState(0);
+  const [currentReason, setCurrentReason] = useState(0);
+  const [showHearts, setShowHearts] = useState(true);
+  
+  const CORRECT_DATE = '01/10/2024';
+  
+  const loveMessages = [
+    "Tienes los ojitos más preciosos que he visto jamás ✨",
+    "Quisiera poder abrazarte fuerte y no separarme de ti 🤗",
+    "Realmente te adoro con todo mi corazón ❤️",
+    "¿Sabes que eres mi razón? ¿No? Pues ahora lo sabes 💫",
+    "Aunque no pueda estar a tu lado siempre... Ten en cuenta que te amo 💕",
+    "Eres mi niño, y te adoro con todo mi corazón... 💝",
+    "Cada sonrisa tuya ilumina mi día entero ✨",
+    "Me encantas exactamente como eres 💫",
+    "Contigo los momentos simples se vuelven mágicos ✨",
+    "Eres mi persona favorita en todo el mundo 🌎",
+    "Tu amor hace que todo sea mejor 💖",
+    "Me haces sonreír sin siquiera intentarlo 😊",
+    "Eres el mejor regalo que la vida me ha dado 🎁",
+    "Cada día me enamoro más de ti 💘",
+    "Eres mi lugar favorito para estar 🏡",
+    "Tu amor es mi mayor fortaleza 💪",
+    "Contigo todo es posible 🌟",
+    "Eres mi historia favorita de amor ❤️",
+    "Me encanta cómo me haces sentir 🥰",
+    "Tu felicidad es mi felicidad 😊",
+    "Eres mi pensamiento favorito 💭",
+    "Contigo el tiempo pasa volando ⏰",
+    "Me encantan nuestras locuras juntos 🎉",
+    "Eres mi pequeño universo entero 🌌",
+    "Tu amor me hace mejor persona 💫",
+    "Cada momento contigo es un tesoro 💎",
+    "Eres mi mayor bendición 🙏",
+    "Tu amor es mi canción favorita 🎵",
+    "Me enamoran tus detalles conmigo 🎀",
+    "Eres mi mejor decisión ✨"
+  ];
 
-        .container {
-            position: absolute;
-            left: 50%;
-            top: 30%;
-            transform: translate(-50%, -50%);
-        }
+  const reasons = [
+    "Por tu forma de hacerme sonreír",
+    "Por cómo me cuidas siempre",
+    "Por tu manera única de ser",
+    "Por tu hermoso corazón",
+    "Por cómo me haces sentir especial",
+    "Por todos nuestros momentos juntos",
+    "Por tu apoyo incondicional",
+    "Por tu dulzura conmigo",
+    "Por cómo me entiendes",
+    "Por ser exactamente como eres",
+    "Por tu risa que ilumina mi día",
+    "Por la forma en que me miras",
+    "Por cómo sostienes mi mano",
+    "Por tus abrazos que me hacen sentir en casa",
+    "Por tu inteligencia que me cautiva",
+    "Por tu fortaleza ante las dificultades",
+    "Por la magia que traes a mi vida",
+    "Por tu paciencia conmigo",
+    "Por las conversaciones hasta el amanecer",
+    "Por cómo me inspiras a ser mejor",
+    "Por los pequeños detalles que tienes",
+    "Por tu pasión en todo lo que haces",
+    "Por tu forma de escucharme",
+    "Por tu sinceridad en todo momento",
+    "Por cómo me aceptas con mis defectos",
+    "Por tu creatividad que me sorprende",
+    "Por los sueños que compartimos",
+    "Por tu valentía que me motiva",
+    "Por la paz que siento a tu lado",
+    "Por tu generosidad con todos",
+    "Por cómo iluminas cualquier habitación",
+    "Por tu sentido del humor único",
+    "Por tus consejos cuando más los necesito",
+    "Por la magia de tu mirada",
+    "Por tus palabras de aliento",
+    "Por la energía positiva que irradias",
+    "Por tu autenticidad en un mundo de copias",
+    "Por tu forma de ver lo bueno en todo",
+    "Por cómo me haces creer en el amor",
+    "Por los proyectos que emprendemos juntos",
+    "Por tu lealtad inquebrantable",
+    "Por tu cariño que me envuelve",
+    "Por las aventuras que vivimos",
+    "Por tu manera de hacerme sentir protegido/a",
+    "Por tu voz que calma mis tempestades",
+    "Por tu comprensión cuando me equivoco",
+    "Por la felicidad que generas a tu alrededor",
+    "Por ser mi compañero/a perfecto/a",
+    "Por tu alma hermosa que brilla",
+    "Por ser mi persona favorita en este mundo",
+    "Existen demasiadas razones para amarte, pero las palabras no lograrían explicarlas, así que te diré solo algunas"
+  ];
 
-        .glass {
-            height: 800px;
-            width: 600px;
-            background: #122139;
-            border-radius: 300px 300px 0px 0px;
-        }
+  // Efecto de corazones flotantes
+  const FloatingHearts = () => {
+    const [hearts, setHearts] = useState([]);
 
-        .glass:before {
-            content: "";
-            height: 40px;
-            width: 40px;
-            transform-origin: center;
-            border: 25px solid #122139;
-            border-radius: 100%;
-            position: absolute;
-            left: 256px;
-            top: -74px;
-        }
+    useEffect(() => {
+      if (!showHearts) return;
+      
+      const interval = setInterval(() => {
+        const newHeart = {
+          id: Date.now(),
+          left: Math.random() * 100,
+          size: 12 + Math.random() * 20,
+          animationDuration: 3 + Math.random() * 3
+        };
 
-        .glass:after {
-            content: "";
-            position: absolute;
-            height: 15px;
-            width: 600px;
-            background: #a52a2a;
-            top: 100%;
-            left: 0%;
-        }
+        setHearts(prev => [...prev, newHeart]);
+        setTimeout(() => {
+          setHearts(prev => prev.filter(h => h.id !== newHeart.id));
+        }, newHeart.animationDuration * 1000);
+      }, 300);
 
-        .shine {
-            width: 26px;
-            height: 330px;
-            background: white;
-            opacity: 0.2;
-            position: absolute;
-            left: 85%;
-            top: 200px;
-            border-radius: 100px;
-            z-index: 10;
-        }
+      return () => clearInterval(interval);
+    }, []);
 
-        .shine:before {
-            content: "";
-            width: 26px;
-            height: 40px;
-            position: absolute;
-            background: white;
-            top: 365px;
-            border-radius: 100px;
-        }
-
-        .petals>div {
-            position: absolute;
-            background: #d52d58;
-            width: 85px;
-            height: 120px;
-            top: 200px;
-            transition: all 0.5s ease-out;
-        }
-
-        .petals>div:nth-child(1) {
-            border-radius: 15px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, 1);
-            left: 268px;
-            top: 200px;
-            background: #d52d58;
-        }
-
-        .petals>div:nth-child(2),
-        .petals>div:nth-child(4),
-        .petals>div:nth-child(6) {
-            background: #b81b43;
-            left: 230px;
-            border-radius: 0px 50px 0px 50px;
-            transform-origin: bottom right;
-        }
-
-        .petals>div:nth-child(3),
-        .petals>div:nth-child(5),
-        .petals>div:nth-child(7) {
-            background: #b81b43;
-            left: 300px;
-            border-radius: 50px 0px 50px 0px;
-            transform-origin: bottom left;
-        }
-
-        .petals>div:nth-child(2) {
-            z-index: 5;
-            background: #ab1a3f;
-            top: 218px;
-            height: 130px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
-            animation: bloom2 3s ease-in-out;
-            animation-fill-mode: forwards;
-        }
-
-        .petals>div:nth-child(3) {
-            z-index: 4;
-            background: #ab1a3f;
-            top: 218px;
-            height: 130px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
-            animation: bloom3 3s ease-in-out, glowing 2.5s ease-in-out infinite;
-            animation-fill-mode: forwards;
-        }
-
-        .petals>div:nth-child(4) {
-            z-index: 3;
-            background: #b81b43;
-            top: 213px;
-            height: 135px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
-            animation: bloom4 3s ease-in-out, glowing 2.5s ease-in-out infinite;
-            animation-fill-mode: forwards;
-        }
-
-        .petals>div:nth-child(5) {
-            z-index: 2;
-            background: #b81b43;
-            top: 213px;
-            height: 135px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, .5);
-            animation: bloom5 3s ease-in-out, glowing 2.5s ease-in-out infinite;
-            animation-fill-mode: forwards;
-        }
-
-        .petals>div:nth-child(6) {
-            z-index: 1;
-            background: #c9204b;
-            top: 200px;
-            height: 130px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, .3);
-            animation: bloom6 3s ease-in-out, glowing 2.5s ease-in-out infinite;
-            animation-fill-mode: forwards;
-        }
-
-        .petals>div:nth-child(7) {
-            z-index: 0;
-            background: #c9204b;
-            top: 200px;
-            height: 130px;
-            box-shadow: 0px 0px 60px rgba(245, 148, 184, .3);
-            animation: bloom7 3s ease-in-out, glowing 2.5s ease-in-out infinite;
-            animation-fill-mode: forwards;
-        }
-
-        .deadPetals>div {
-            position: absolute;
-            background: #d52d58;
-            width: 20px;
-            height: 15px;
-            top: 200px;
-            border-radius: 0px 30px 0px 30px;
-            box-shadow: 0px 0px 30px rgba(245, 148, 184, .5);
-            transition: all 0.5s ease-out;
-        }
-
-        .deadPetals>div:nth-child(1) {
-            left: 119229959987px;
-            transform: rotate(-30deg);
-            animation: falling 20s 4s ease-in-out infinite;
-        }
-
-        .deadPetals>div:nth-child(2) {
-            left: 26331084746px;
-            transform: rotate(-30deg);
-            animation: falling 20s 8s ease-in-out infinite;
-        }
-
-        .deadPetals>div:nth-child(3) {
-            left: 129759500363px;
-            transform: rotate(-30deg);
-            animation: falling 20s 12s ease-in-out infinite;
-        }
-
-        .deadPetals>div:nth-child(4) {
-            left: 99323149959px;
-            transform: rotate(-30deg);
-            animation: falling 20s 16s ease-in-out infinite;
-        }
-
-        .leaves>div:nth-last-child(1) {
-            position: absolute;
-            width: 55px;
-            height: 30px;
-            background: #338f37;
-            top: 334px;
-            left: 278px;
-            border-radius: 100px;
-        }
-
-        .leaves>div:nth-child(1) {
-            position: absolute;
-            width: 15px;
-            height: 390px;
-            background: #054c05;
-            top: 308px;
-            left: 300px;
-            border-radius: 0 0 100px 100px;
-        }
-
-        .leaves>div:nth-child(2) {
-            position: absolute;
-            width: 60px;
-            height: 100px;
-            top: 53px;
-            border-radius: 10px 80px 40px 80px;
-            background: #054c05;
-            transform-origin: bottom;
-            transform: rotate(-30deg);
-            top: 412px;
-            left: 254px;
-            box-shadow: inset 10px 10px #066406;
-        }
-
-        .leaves>div:nth-child(3) {
-            position: absolute;
-            width: 60px;
-            height: 100px;
-            top: 53px;
-            border-radius: 80px 1px 80px 40px;
-            background: #054c05;
-            transform-origin: bottom;
-            transform: rotate(30deg);
-            top: 360px;
-            left: 300px;
-            box-shadow: inset -10px 10px #066406;
-        }
-
-        .thorns>div {
-            position: absolute;
-            width: 0;
-            height: 0;
-            top: 200px;
-        }
-
-        .thorns>div:nth-child(odd) {
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-left: 15px solid #054c05;
-            left: 315px;
-        }
-
-        .thorns>div:nth-child(even) {
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 15px solid #054c05;
-            left: 285px;
-        }
-
-        .thorns>div:nth-child(1) {
-            top: 465px;
-        }
-
-        .thorns>div:nth-child(2) {
-            top: 390px;
-        }
-
-        .thorns>div:nth-child(4) {
-            top: 525px;
-        }
-
-        @keyframes bloom2 {
-            50% {
-                transform: rotate(-90deg);
-                top: 400px;
-                left: 150px;
+    return (
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {hearts.map(heart => (
+          <div
+            key={heart.id}
+            className="absolute text-2xl"
+            style={{
+              left: `${heart.left}%`,
+              bottom: '-20px',
+              fontSize: `${heart.size}px`,
+              animation: `float ${heart.animationDuration}s linear forwards`
+            }}
+          >
+            ❤️
+          </div>
+        ))}
+        <style jsx>{`
+          @keyframes float {
+            0% {
+              transform: translateY(0) rotate(0deg);
+              opacity: 0.8;
             }
-
             100% {
-                transform: rotate(-60deg);
-                top: 615px;
-                left: 100px;
-                background: #71122a;
-                box-shadow: 0px 0px 0px rgba(245, 148, 184, 0);
+              transform: translateY(-100vh) rotate(360deg);
+              opacity: 0;
             }
-        }
+          }
+        `}</style>
+      </div>
+    );
+  };
 
-        @keyframes bloom3 {
-            100% {
-                transform: rotate(50deg);
-            }
-        }
+  const handleDateSubmit = () => {
+    if (date === CORRECT_DATE) {
+      setCurrentView('main');
+      setError('');
+    } else {
+      setError('¡Más vale que te hayas equivocado de broma nomás! 😃');
+    }
+  };
 
-        @keyframes bloom4 {
-            100% {
-                transform: rotate(-25deg);
-            }
-        }
+  const MenuButton = ({ icon, label, onClick, active }) => (
+    <button
+      onClick={onClick}
+      className={`flex items-center space-x-2 w-full p-4 rounded-lg transition-colors ${
+        active 
+          ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white' 
+          : 'text-gray-700 hover:bg-pink-50'
+      }`}
+    >
+      {icon}
+      <span className="font-medium">{label}</span>
+    </button>
+  );
 
-        @keyframes bloom5 {
-            100% {
-                transform: rotate(25deg);
-            }
-        }
+  const [activeSection, setActiveSection] = useState('inicio');
 
-        @keyframes bloom6 {
-            100% {
-                transform: rotate(-10deg);
-            }
-        }
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'mensajes':
+        return (
+          <div className="p-4 space-y-4">
+            <Card className="bg-gradient-to-r from-pink-50 to-red-50 p-6">
+              <CardContent>
+                <p className="text-lg text-gray-800 italic">"{loveMessages[currentMessage]}"</p>
+                <button 
+                  onClick={() => setCurrentMessage((prev) => (prev + 1) % loveMessages.length)}
+                  className="mt-4 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                >
+                  Nuevo Mensaje ❤️
+                </button>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      case 'musica':
+        return (
+          <div className="p-4 space-y-4 pb-24">
+            <h2 className="text-xl font-bold text-pink-600 mb-4">Nuestra Playlist</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {playlistSongs.map((song) => (
+                <Card key={song.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-4">
+                      <img src={song.cover} alt={song.title} className="w-16 h-16 rounded-lg" />
+                      <div className="flex-1">
+                        <h3 className="font-medium">{song.title}</h3>
+                        <p className="text-gray-600 text-sm">{song.artist}</p>
+                        <a 
+                          href={song.spotifyUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-block px-3 py-1 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors text-sm"
+                        >
+                          ▶️ Escuchar en Spotify
+                        </a>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        );
+      case 'razones':
+        return (
+          <div className="p-4 space-y-4">
+            <Card className="bg-gradient-to-r from-red-50 to-pink-50 p-6">
+              <CardHeader>
+                <CardTitle className="text-center text-pink-600">Razones por las que te amo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center">
+                  <div className="text-5xl mb-6">❤️</div>
+                  <p className="text-lg text-gray-800 mb-6 font-medium">{reasons[currentReason]}</p>
+                  <p className="text-sm text-gray-600 mb-4">{currentReason + 1} de {reasons.length}</p>
+                  <button 
+                    onClick={() => setCurrentReason((prev) => (prev + 1) % reasons.length)}
+                    className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                  >
+                    Siguiente Razón 💘
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      case 'fotos':
+        return (
+          <div className="p-4 text-center space-y-4">
+            <h2 className="text-xl font-bold text-pink-600 mb-4">Nuestros Recuerdos</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="rounded-lg overflow-hidden shadow-md">
+                  <img 
+                    src={`/api/placeholder/300/300`} 
+                    alt={`Recuerdo ${i}`} 
+                    className="w-full h-40 object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-gray-600 italic mt-4">Aquí irán nuestras fotos especiales... ♥</p>
+          </div>
+        );
+      default:
+        return (
+          <div className="p-4 text-center space-y-6">
+            <div className="text-5xl mb-2">💖</div>
+            <h2 className="text-2xl font-bold text-pink-600 mb-4">¡Feliz 6 Meses Amor!</h2>
+            <p className="text-gray-700">
+              Seis meses a tu lado han sido el mejor viaje de mi vida.
+              Cada momento contigo es un regalo que atesoro en mi corazón.
+              Este pequeño espacio es para celebrar nuestro amor y todo lo que hemos construido juntos.
+            </p>
+            <div className="grid grid-cols-2 gap-4 mt-6">
+              <button
+                onClick={() => setActiveSection('mensajes')}
+                className="p-4 bg-gradient-to-r from-pink-400 to-pink-500 text-white rounded-lg shadow-md hover:from-pink-500 hover:to-pink-600 transition-colors"
+              >
+                Mensajes para ti ❤️
+              </button>
+              <button
+                onClick={() => setActiveSection('razones')}
+                className="p-4 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-lg shadow-md hover:from-red-500 hover:to-red-600 transition-colors"
+              >
+                Razones de mi amor 💕
+              </button>
+            </div>
+            <div className="mt-4">
+              <button
+                onClick={() => setShowHearts(!showHearts)}
+                className="px-4 py-2 bg-pink-100 text-pink-600 rounded-lg hover:bg-pink-200 transition-colors"
+              >
+                {showHearts ? "Pausar corazones" : "Mostrar corazones"} 💗
+              </button>
+            </div>
+            <div className="mt-6">
+              <button
+                onClick={() => setActiveSection('musica')}
+                className="p-4 bg-gradient-to-r from-purple-400 to-pink-500 text-white rounded-lg shadow-md hover:from-purple-500 hover:to-pink-600 transition-colors"
+              >
+                Explorar nuestra playlist 🎵
+              </button>
+            </div>
+          </div>
+        );
+    }
+  };
 
-        @keyframes bloom7 {
-            100% {
-                transform: rotate(10deg);
-            }
-        }
-
-        @keyframes glowing {
-            50% {
-                background: #d7365f;
-                box-shadow: 0px 0px 60px rgba(245, 148, 184, 1);
-            }
-        }
-
-        @keyframes falling {
-            20% {
-                top: 335px;
-                background: #9d193b;
-                box-shadow: 0px 0px 0px rgba(245, 148, 184, 0);
-            }
-
-            100% {
-                top: 335px;
-                opacity: 0;
-            }
-        }
-
-        .texto {
-            top: 50%;
-            color: white;
-            font-size: 35px;
-            position: absolute;
-            left: 10%;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="glass">
-            <div class="shine"></div>
+  if (currentView === 'login') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-500 to-pink-500 flex flex-col items-center justify-center p-4 space-y-4">
+        {showHearts && <FloatingHearts />}
+        <div className="text-white text-3xl font-bold mb-8 text-center">
+          Seis meses de amor y miles más por venir ❤️
         </div>
-        <div class="thorns">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+        <Card className="w-full max-w-md bg-white/95 backdrop-blur p-6 space-y-4">
+          <CardContent>
+            <div className="text-center mb-4">
+              Ingresa nuestra fecha especial para continuar
+              <br />
+              (DD/MM/YYYY)
+            </div>
+            <input
+              type="text"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="DD/MM/YYYY"
+              className="w-full p-2 border rounded-lg mb-4 text-center focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+            />
+            <button
+              onClick={handleDateSubmit}
+              className="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white p-2 rounded-lg hover:from-red-600 hover:to-pink-600 transition-colors"
+            >
+              Celebrar Nuestros 6 Meses ❤️
+            </button>
+            {error && (
+              <div className="text-pink-500 text-center mt-2 animate-bounce">
+                {error}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-red-500 to-pink-500">
+      {showHearts && <FloatingHearts />}
+      <div className="flex flex-col h-screen">
+        <div className="p-4">
+          <div className="text-white text-2xl flex items-center space-x-2">
+            <Heart className="text-white" fill="white" />
+            <span>Nuestros 6 Meses ❤️</span>
+          </div>
         </div>
-        <div class="leaves">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+        
+        <div className="flex-1 bg-white rounded-t-3xl p-4 overflow-auto pb-24">
+          {renderContent()}
+          
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-2">
+            <div className="grid grid-cols-5 gap-2 max-w-lg mx-auto">
+              <MenuButton 
+                icon={<Home size={20} />}
+                label="Inicio"
+                onClick={() => setActiveSection('inicio')}
+                active={activeSection === 'inicio'}
+              />
+              <MenuButton 
+                icon={<MessageCircle size={20} />}
+                label="Mensajes"
+                onClick={() => setActiveSection('mensajes')}
+                active={activeSection === 'mensajes'}
+              />
+              <MenuButton 
+                icon={<Music size={20} />}
+                label="Música"
+                onClick={() => setActiveSection('musica')}
+                active={activeSection === 'musica'}
+              />
+              <MenuButton 
+                icon={<Gift size={20} />}
+                label="Razones"
+                onClick={() => setActiveSection('razones')}
+                active={activeSection === 'razones'}
+              />
+              <MenuButton 
+                icon={<Camera size={20} />}
+                label="Fotos"
+                onClick={() => setActiveSection('fotos')}
+                active={activeSection === 'fotos'}
+              />
+            </div>
+          </div>
         </div>
-        <div class="petals">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="deadPetals">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+      </div>
     </div>
-    <div>
-        <h4 class="texto">Mi amor por ti durará hasta que caiga el último pétalo ❤️</h>
-    </div>
-</body>
+  );
+};
 
-</html>
+export default AnniversaryPage;
